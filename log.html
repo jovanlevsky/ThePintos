@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+    <title>TuneUp - Log Service</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">TuneUp</div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="garage.html ">My Garage</a></li>
+                <li><a href="log.html"class="active">Log Service</a></li>
+                <li><a href="login.html" >Login</a></li>
+                <li><a href="about.html">About team</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="log-container">
+        <section class="log-box input-section">
+            <h2>Record a Service</h2>
+            <form id="maintenance-form">
+                <div class="form-group">
+                    <label for="vehicle">Select Vehicle: </label>
+                    <select id="vehicle" required>
+                        <option value="">Choose a  Vehicle</option>
+                        <option value="2018 Honda Civic">2018 Honda Civic</option>
+                        <option value="2021 Toyota RAV4">2021 Toyota RAV4</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="data">Date of Service:</label>
+                    <input type="date" id="date" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="service-type">Service Performed:</label>
+                    <select id="service-type"></select>
+                        <option value="">Select Service Type</option>
+                        <option value="Oil Change">Oil Change</option>
+                        <option value="Tire Rotation">Tire Rotation</option>
+                        <option value="Brake Pad Replacement">Brake Pad Replacement</option>
+                        <option value="Fluid Check">Fluid Check</option>
+                        <option value="Inspection">State Inspection</option>
+                </div>
+
+                <div class="form-group">
+                    <label for="mileage">Current Mileage:</label>
+                    <input type="number" id="mileage" placeholder="e.g. 45000" required>
+                </div>
+            </form>
+
+        </section>
+
+        <section class="log-box history-selection">
+            <h2>Recent Service Logs</h2>
+            <div id="log-container">
+                <ul id="service-list">
+                    <li>
+                        <strong>2026-03-28</strong> | <strong>2018 Honda Civic</strong><br>
+                        Service: Tire Rotation <br>
+                        Mileage: 44,500 miles
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

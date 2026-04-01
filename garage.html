@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+    <title>TuneUp - My Garage</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">TuneUp</div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="garage.html" class="active">My Garage</a></li>
+                <li><a href="log.html">Log Service</a></li>
+                <li><a href="login.html" >Login</a></li>
+                <li><a href="about.html">About team</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="garage-header">
+            <h1>My Garage</h1>
+            <button id="add-vehicle-btn" class="btn">+ Add New Vehicle</button>
+        </div>
+
+        <section class="vehicle-grid">
+
+            <div class="vehicle-card">
+                <div class="vehicle-icon">IconPlaceholder</div>
+                <h3>2018 Honda Civic</h3>
+                <ul class="vehicle-stats">
+                    <li><strong>VIN: </strong>######</li>
+                    <li><strong>License Plate: </strong>ABC-1234</li>
+                    <li><strong>Current Mileage: </strong>44,500</li>
+                    <li><strong>Status: </strong><span style="color: #dc3545; font-weight: bold;">Needs Oil Change</span></li>
+                </ul>
+                <div class="card-actions">
+                    <a href="log.html" class="btn">Log Service</a>
+                    <button class="btn btn-secondary">Edit Details</button>
+                </div>
+            </div>
+
+            <div class="vehicle-card">
+                <div class="vehicle-icon">IconPlaceholder</div>
+                <h3>2021 Toyota RAV4</h3>
+                <ul class="vehicle-stats">
+                    <li><strong>VIN: </strong>######</li>
+                    <li><strong>License Plate: </strong>XYZ-4321</li>
+                    <li><strong>Current Mileage: </strong>35,000</li>
+                    <li><strong>Status: </strong><span style="color: #28a745; font-weight: bold;">Up to Date</span></li>
+                </ul>
+                <div class="card-actions">
+                    <a href="log.html" class="btn">Log Service</a>
+                    <button class="btn btn-secondary">Edit Details</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

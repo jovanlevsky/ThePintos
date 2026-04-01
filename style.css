@@ -1,0 +1,296 @@
+/* Nav Bar Styles */
+header {
+    background-color: #333;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links li {
+    margin-left: 20px;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.nav-links a:hover, .nav-links a.active {
+    background-color: #0056b3;
+}
+
+/* Dashboard Grid Styles */
+.dashboard-grid {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    flex: 1;
+    min-width: 200px;
+}
+
+/* Alert border for urgent information */
+.card.alert {
+    border-left: 5px solid #dc3545;
+}
+
+.btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #0056b3;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.btn:hover {
+    background-color: #004494;
+}
+
+/* Authentication page styles */
+
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+}
+
+.auth-box {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.auth-box h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.auth-box p {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.hidden {
+    display: none;
+}
+
+/* About page styles */
+
+.about-purpose {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 40px auto;
+}
+
+.about-purpose h1 {
+    font-size: 32px;
+    margin-bottom: 5px;
+}
+
+.about-purpose h2 {
+    color: #0056b3;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.section-divider {
+    border: 0;
+    height: 1px;
+    background: #ccc;
+    margin: 40px 0;
+}
+
+.team-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.team-member {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    width: calc(33.333% - 20px); /* 3 columns on large format */
+    min-width: 250px;  /* force wrap on moblie */
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.profile-pic-placeholder {
+    width: 120px;
+    height: 120px;
+    background-color: #e9ecef;
+    border-radius: 50%;
+    margin: 0 auto 15px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    font-size: 14px;
+    border:  2px dashed #ccc;
+}
+
+.team-member h3 {
+    margin: 0 0 5px 0;
+}
+
+.member-role {
+    font-style: italic;
+    color: #666;
+    margin: 0 0 15px 0;
+    font-size: 14px;
+}
+
+.member-bio {
+    font-size: 14px;
+    color: #333;
+}
+
+/* Garage page style */
+
+.garage-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 10px;
+}
+
+.garage-header h1 {
+    margin: 0;
+}
+
+.vehicle-grid {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.vehicle-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    flex: 1;
+    min-width: 300px;
+    border-top: 5px solid #0056b3;
+}
+
+.vehicle-icon {
+    font-size: 40px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.vehicle-card h3 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 22px;
+}
+
+.vehicle-stats {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+
+.vehicle-stats li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 15px;
+}
+
+.vehicle-stats li:last-child {
+    border-bottom: none;
+}
+
+.card-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+/* Service Log Page Style */
+
+.log-container {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.log-box {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    flex: 1;
+    min-width: 300px;
+}
+
+.log-box h2 {
+    margin-top: 0;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+#service-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#service-list li {
+    background: #f8f9fa;
+    margin-bottom: 15px;
+    padding: 15px;
+    border-radius: 6px;
+    border-left: 5px solid #28a745;
+    font-size: 15px;
+}

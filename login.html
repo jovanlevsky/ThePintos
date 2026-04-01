@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+    <title>TuneUp - Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">TuneUp</div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="garage.html">My Garage</a></li>
+                <li><a href="log.html">Log Service</a></li>
+                <li><a href="login.html" class="active">Login</a></li>
+                <li><a href="about.html">About team</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="auth-container">
+        <section id="login-section" class="auth-box">
+            <h2>Login to TuneUp</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email:</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password:</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit" class="btn">Login</button>
+            </form>
+            <p> Don't have an account yet? <a href="#" id="show-register">Sign up here!</a>.</p>
+        </section>
+
+        <section id="register-section" class="auth-box hidden">
+            <h2>Create an Account</h2>
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="reg-name">Name:</label>
+                    <input type="text" id="reg-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-email">Email:</label>
+                    <input type="email" id="reg-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-password">Password:</label>
+                    <input type="password" id="reg-password" required>
+                </div>
+                <button type="submit" class="btn">Create Account</button>
+            </form>
+            <p>Already have an account?<a href="#" id="show-login">Login here</a>.</p>
+        </section>
+        
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
