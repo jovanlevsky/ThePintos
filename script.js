@@ -113,7 +113,7 @@ if (maintenanceForm && serviceList) {
 
         // Format output
         newRecord.innerHTML = `
-            <strong>${date}</strong | <strong>${vehicle}</strong><br>
+            <strong>${date}</strong> | <strong>${vehicle}</strong><br>
             Service: ${serviceType} <br>
             Mileage: ${mileage} miles
         `;
@@ -125,4 +125,8 @@ if (maintenanceForm && serviceList) {
         alert("Service logged successfully!");
         maintenanceForm.reset();
     });
+}
+function logoutUser() {
+    localStorage.removeItem('loggedInUser');
+    window.location.href = 'login.html';
 }
