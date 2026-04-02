@@ -20,19 +20,60 @@ if (loginSection && registerSection) {
         loginSection.classList.remove('hidden');
     });
 
-    // Mock login
+    // logging in
     document.getElementById('login-form').addEventListener('submit', function(event) {
         event.preventDefault();
-        alert("Login simulated succsessfully, return to dashboard..");
-        window.location.href = 'index.html'; // returns user to dashboard
+
+        const email = document.getElementById('login-email').value.trim();
+        const password = document.getElementById('login-password').value.trim();
+
+        if (!email || !password) {
+            alert("Please enter both email and password.");
+            return;
+        }
+
+        const savedUser = JSON.parse(localStorage.getItem('registeredUser'));
+
+        if (savedUser) {
+            if (email === savedUser.email && password === savedUser.password) {
+                localStorage.setItem('loggedInUser', email);
+                alert("Login successful!");
+                window.location.href = 'index.html';
+            } else {
+                alert("Invalid email or password.");
+            }
+        } else {
+            
+            localStorage.setItem('loggedInUser', email);
+            alert("Login successful!");
+            window.location.href = 'index.html';
+        }
     });
 
-    // Mock user registration
+    // registering the user
     document.getElementById('register-form').addEventListener('submit', function(event) {
         event.preventDefault();
-        alert("Account created! You can now log in.");
-        registerSection.classList.add('hidden');
-        loginSection.classList.remove('hidden');
+
+        const name = document.getElementById('reg-name').value.trim();
+        const email = document.getElementById('reg-email').value.trim();
+        const password = document.getElementById('reg-password').value.trim();
+
+        if (!name || !email || !password) {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        const user = {
+            name: name,
+            email: email,
+            password: password
+        };
+
+        localStorage.setItem('registeredUser', JSON.stringify(user));
+        localStorage.setItem('loggedInUser', email);
+
+        alert("Account created successfully!");
+        window.location.href = 'index.html';
     });
 }
 
