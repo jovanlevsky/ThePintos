@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TuneUp - Log Service</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -12,10 +12,11 @@
         <nav>
             <ul class="nav-links">
                 <li><a href="index.html">Dashboard</a></li>
-                <li><a href="garage.html ">My Garage</a></li>
-                <li><a href="log.html"class="active">Log Service</a></li>
-                <li><a href="login.html" >Login</a></li>
-                <li><a href="about.html">About team</a></li>
+                <li><a href="garage.html">My Garage</a></li>
+                <li><a href="log.html" class="active">Log Service</a></li>
+                <li><a href="reminders.html">Reminders</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="about.html">About</a></li>
             </ul>
         </nav>
     </header>
@@ -25,47 +26,83 @@
             <h2>Record a Service</h2>
             <form id="maintenance-form">
                 <div class="form-group">
-                    <label for="vehicle">Select Vehicle: </label>
-                    <select id="vehicle" required>
-                        <option value="">Choose a  Vehicle</option>
-                        <option value="2018 Honda Civic">2018 Honda Civic</option>
-                        <option value="2021 Toyota RAV4">2021 Toyota RAV4</option>
+                    <label for="vehicle">Select Vehicle <span class="req">*</span></label>
+                    <select id="vehicle" class="vehicle-select" required>
+                        <option value="">Choose a Vehicle</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="data">Date of Service:</label>
+                    <label for="date">Date of Service <span class="req">*</span></label>
                     <input type="date" id="date" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="service-type">Service Performed:</label>
-                    <select id="service-type"></select>
+                    <label for="service-type">Service Performed <span class="req">*</span></label>
+                    <select id="service-type" required>
                         <option value="">Select Service Type</option>
                         <option value="Oil Change">Oil Change</option>
                         <option value="Tire Rotation">Tire Rotation</option>
+                        <option value="Tire Replacement">Tire Replacement</option>
                         <option value="Brake Pad Replacement">Brake Pad Replacement</option>
+                        <option value="Brake Inspection">Brake Inspection</option>
                         <option value="Fluid Check">Fluid Check</option>
-                        <option value="Inspection">State Inspection</option>
+                        <option value="State Inspection">State Inspection</option>
+                        <option value="Air Filter">Air Filter Replacement</option>
+                        <option value="Battery Replacement">Battery Replacement</option>
+                        <option value="Transmission Service">Transmission Service</option>
+                        <option value="Coolant Flush">Coolant Flush</option>
+                        <option value="Other">Other</option>
+                    </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="mileage">Current Mileage:</label>
-                    <input type="number" id="mileage" placeholder="e.g. 45000" required>
+                    <label for="mileage">Mileage at Service <span class="req">*</span></label>
+                    <input type="number" id="mileage" placeholder="e.g. 45000" min="0" required>
                 </div>
-            </form>
 
+                <div class="form-group">
+                    <label for="notes">Notes (optional)</label>
+                    <textarea id="notes" placeholder="Any additional details about the service..." rows="3"></textarea>
+                </div>
+
+                <button type="submit" class="btn">Log Service</button>
+            </form>
         </section>
 
-        <section class="log-box history-selection">
-            <h2>Recent Service Logs</h2>
+        <section class="log-box history-section">
+            <h2>Service History</h2>
+
+            <div class="filter-bar">
+                <div class="form-group" style="margin-bottom:0;">
+                    <label for="filter-vehicle">Filter by Vehicle</label>
+                    <select id="filter-vehicle" class="vehicle-select">
+                        <option value="">All Vehicles</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                    <label for="filter-type">Filter by Service</label>
+                    <select id="filter-type">
+                        <option value="">All Services</option>
+                        <option value="Oil Change">Oil Change</option>
+                        <option value="Tire Rotation">Tire Rotation</option>
+                        <option value="Tire Replacement">Tire Replacement</option>
+                        <option value="Brake Pad Replacement">Brake Pad Replacement</option>
+                        <option value="Brake Inspection">Brake Inspection</option>
+                        <option value="Fluid Check">Fluid Check</option>
+                        <option value="State Inspection">State Inspection</option>
+                        <option value="Air Filter">Air Filter Replacement</option>
+                        <option value="Battery Replacement">Battery Replacement</option>
+                        <option value="Transmission Service">Transmission Service</option>
+                        <option value="Coolant Flush">Coolant Flush</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+            </div>
+
             <div id="log-container">
                 <ul id="service-list">
-                    <li>
-                        <strong>2026-03-28</strong> | <strong>2018 Honda Civic</strong><br>
-                        Service: Tire Rotation <br>
-                        Mileage: 44,500 miles
-                    </li>
+                    <!--filled in by script-->
                 </ul>
             </div>
         </section>
