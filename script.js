@@ -1,9 +1,18 @@
+// people can't access pages without logging in first.
+if (!localStorage.getItem('loggedInUser') && window.location.pathname.split('/').pop() !== 'login.html') {
+    window.location.href = 'login.html';
+}
+if (window.location.pathname.split('/').pop() === "login.html") {
+    document.querySelectorAll(".other-btn").forEach(btn => {
+        btn.classList.add("hidden");
+    });
+}
 // Authentication Toggle Logic
 const loginSection = document.getElementById('login-section');
 const registerSection = document.getElementById('register-section');
 const showRegisterBtn = document.getElementById('show-register');
 const showLoginBtn = document.getElementById('show-login');
-let isLoggedIn = false;
+let isLoggedIn = !!localStorage.getItem('loggedInUser');
 const notifier = document.getElementById('notifier');
 
 // check page before running logic
@@ -316,8 +325,27 @@ function logoutUser() {
     window.location.href = 'login.html';
 }
 
+function authBtnChange() {
+    const btn = document.getElementById('auth-btn');
+    if (!btn) return;
+
+    if (isLoggedIn) {
+        btn.innerText = "Logout";
+        btn.onclick = logoutUser;
+    } else {
+        btn.innerText = "Login";
+        btn.onclick = () => window.location.href = "login.html";
+    }
+}
 
 // router logic for log and garage ---------
 const page = window.location.pathname.split('/').pop() || 'index.html';
-if (page === 'garage.html') initGarage();
-if (page === 'log.html') initLog();
+if (page === 'garage.html'){
+    initGarage();
+    authBtnChange();
+    console.log(isLoggedIn);
+} 
+if (page === 'log.html') {
+    initLog();
+    authBtnChange();
+}
