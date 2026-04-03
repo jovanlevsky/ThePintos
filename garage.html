@@ -2,9 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TuneUp - My Garage</title>
     <link rel="stylesheet" href="style.css">
+
+    <script>
+        const loggedInUser = localStorage.getItem('loggedInUser');
+
+        if (!loggedInUser) {
+            window.location.href = 'login.html';
+        }
+    </script>
 </head>
 <body>
     <header>
@@ -14,7 +22,7 @@
                 <li><a href="index.html">Dashboard</a></li>
                 <li><a href="garage.html" class="active">My Garage</a></li>
                 <li><a href="log.html">Log Service</a></li>
-                <li><a href="login.html" >Login</a></li>
+                <li><a href="login.html" id="login-nav">Login</a></li>
                 <li><a href="about.html">About team</a></li>
             </ul>
         </nav>
@@ -61,5 +69,20 @@
     </main>
 
     <script src="script.js"></script>
+
+    <script>
+        const user = localStorage.getItem('loggedInUser');
+        const loginNav = document.getElementById('login-nav');
+
+        if (user && loginNav) {
+            loginNav.textContent = "Logout";
+            loginNav.href = "#";
+            loginNav.onclick = function(event) {
+                event.preventDefault();
+                localStorage.removeItem('loggedInUser');
+                window.location.href = 'login.html';
+            };
+        }
+    </script>
 </body>
 </html>
