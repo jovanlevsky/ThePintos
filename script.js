@@ -320,6 +320,92 @@ function initLog() {
     renderLogs();
 }
 
+// dashboard logic
+
+function initDashboard() {
+
+    const reminderCard = document.getElementById('reminderCard');
+    const recent = document.getElementById('recentActivity');
+    const garageCard = document.getElementById('garageCard');
+
+    // maintenance reminder card
+    if (reminderCard) {
+        const vehicles = getVehicles();
+        const alerts = [];
+
+        reminderCard.innerHTML = '';
+
+        vehicles.forEach(v => {
+            const vReminders = getVehicleAlerts(v.id);
+            vReminders.forEach(r => {
+                alerts.push({ vehicle: v, service: r.service, milesLeft: r.milesLeft, monthsLeft: r.monthsLeft, type: r.type });
+            });
+        });
+
+        if (alerts.length > 0) {
+            alerts.sort((a, b) => {
+                if (a.type === 'overdue' && b.type === 'soon') return -1;
+                if (a.type === 'soon' && b.type === 'overdue') return 1;
+                return 0;
+            });
+
+            alerts.forEach(alert => {
+                const li = document.createElement('li');
+                li.innerHTML =
+                    '<strong>' + alert.service + '</strong> for <strong>' + 
+                    (alert.vehicle ? alert.vehicle.year + ' ' + alert.vehicle.make + ' ' + alert.vehicle.model : 'Unknown Vehicle') +
+                    '</strong> — ' + (alert.type === 'overdue' ? 'Overdue' : 'Due Soon') +
+                    (alert.type !== 'overdue' && alert.milesLeft > 0 ? ' • ' + alert.milesLeft + ' miles' : '') +
+                    (alert.type !== 'overdue' && alert.monthsLeft > 0 ? ' • ' + alert.monthsLeft + ' month' + (alert.monthsLeft !== 1 ? 's' : '') : '');
+                reminderCard.appendChild(li);
+            });
+        } else {
+            reminderCard.innerHTML = "<li>All vehicles are up to date! Great job!</li>";
+        }
+    }
+
+    // recent activity card
+    if (recent) {
+        const logs = getLogs();
+        const vehicles = getVehicles();
+
+        recent.innerHTML = '';
+
+        if (logs.length > 0) {
+            logs.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            logs.slice(0, 5).forEach(log => {
+                const v = vehicles.find(v => v.id === log.vehicleId);
+                const li = document.createElement('li');
+
+                li.innerHTML =
+                    '<strong>' + log.serviceType + '</strong> for <strong>' +
+                    (v ? v.year + ' ' + v.make + ' ' + v.model : 'Unknown Vehicle') +
+                    '</strong> on ' + log.date;
+
+                recent.appendChild(li);
+            });
+        } else {
+            recent.innerHTML = '<li>No recent activity.</li>';
+        }
+    }
+
+    // garage summary card
+    if (garageCard) {
+        const vehicles = getVehicles();
+
+        if (vehicles.length > 0) {
+            garageCard.innerHTML =
+                '<p><strong>' + vehicles.length + '</strong> vehicle' +
+                (vehicles.length > 1 ? 's' : '') +
+                ' in your garage</p>';
+        } else {
+            garageCard.innerHTML =
+                '<p>Your garage is empty. Add a vehicle to get started!</p>';
+        }
+    }
+}
+
 function logoutUser() {
     localStorage.removeItem('loggedInUser');
     window.location.href = 'login.html';
@@ -347,5 +433,9 @@ if (page === 'garage.html'){
 } 
 if (page === 'log.html') {
     initLog();
+    authBtnChange();
+}
+if (page === 'index.html') {
+    initDashboard();
     authBtnChange();
 }
