@@ -516,7 +516,7 @@ describe('getInitials', () => {
     expect(getInitials('Mary Jane Watson')).toBe('MJ');
   });
 
-  test('handles extra whitespace gracefully', () => {
+  test('handles extra whitespace', () => {
     expect(getInitials('  Jane  Smith  ')).toBe('JS');
   });
 
