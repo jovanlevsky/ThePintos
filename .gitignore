@@ -1,0 +1,4 @@
+/tuneup_backend/node_modules
+/tuneup_backend/package.json
+/tuneup_backend/package-lock.json
+/tuneup_backend/.env
