@@ -5,18 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TuneUp - Log Service</title>
     <link rel="stylesheet" href="style.css">
+
+    
+    <script>
+        const loggedInUser = localStorage.getItem('loggedInUser');
+
+        if (!loggedInUser) {
+            window.location.href = 'login.html';
+        }
+    </script>
 </head>
 <body>
     <header>
         <div class="logo">TuneUp</div>
         <nav>
             <ul class="nav-links">
-                <li class="other-btn"><a href="index.html">Dashboard</a></li>
-                <li class="other-btn"><a href="garage.html">My Garage</a></li>
-                <li class="other-btn"><a href="log.html" class="active">Log Service</a></li>
-                <li class="other-btn"><a href="reminders.html">Reminders</a></li>
-                <li id="auth-btn"><a href="login.html">Login</a></li>
-                <li class="other-btn"><a href="about.html">About</a></li>
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="garage.html">My Garage</a></li>
+                <li><a href="log.html" class="active">Log Service</a></li>
+                <li><a href="login.html" id="login-nav">Login</a></li>
+                <li><a href="about.html">About team</a></li>
             </ul>
         </nav>
     </header>
@@ -24,6 +32,8 @@
     <main class="log-container">
         <section class="log-box input-section">
             <h2>Record a Service</h2>
+
+            
             <form id="maintenance-form">
                 <div class="form-group">
                     <label for="vehicle">Select Vehicle <span class="req">*</span></label>
@@ -37,6 +47,7 @@
                     <input type="date" id="date" required>
                 </div>
 
+                
                 <div class="form-group">
                     <label for="service-type">Service Performed <span class="req">*</span></label>
                     <select id="service-type" required>
@@ -109,5 +120,21 @@
     </main>
 
     <script src="script.js"></script>
+
+    
+    <script>
+        const user = localStorage.getItem('loggedInUser');
+        const loginNav = document.getElementById('login-nav');
+
+        if (user && loginNav) {
+            loginNav.textContent = "Logout";
+            loginNav.href = "#";
+            loginNav.onclick = function(event) {
+                event.preventDefault();
+                localStorage.removeItem('loggedInUser');
+                window.location.href = 'login.html';
+            };
+        }
+    </script>
 </body>
 </html>
