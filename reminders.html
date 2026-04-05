@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +14,7 @@
         }
     </script>
 </head>
+
 <body>
     <header>
         <div class="logo">TuneUp</div>
@@ -23,24 +25,38 @@
                 <li class="other-btn"><a href="log.html">Log Service</a></li>
                 <li class="other-btn"><a href="reminders.html" class="active">Reminders</a></li>
                 <li id="auth-btn"><a href="login.html">Login</a></li>
-                <li class="other-btn"><a href="about.html">About</a></li>
+                <li class="other-btn"><a href="about.html">About team</a></li>
             </ul>
         </nav>
     </header>
 
     <main class="log-container">
         <section class="log-box input-section">
-            <h2>Create Reminder</h2>
+            <h2>Create Maintenance Reminder</h2>
+            <p class="helper-text">
+                Set a dashboard reminder for a service you want to keep track of.
+                TuneUp will show it as <strong>Due Soon</strong> or <strong>Overdue</strong> when the time comes.
+            </p>
+
             <form id="reminder-form">
+
                 <div class="form-group">
-                    <label for="vehicle">Select Vehicle <span class="req">*</span></label>
+                    <label for="vehicle">Vehicle <span class="req">*</span></label>
                     <select id="vehicle" class="vehicle-select" required>
                         <option value="">Choose a Vehicle</option>
                     </select>
                 </div>
 
+                <div id="reminder-vehicle-info" class="log-box" style="margin-bottom: 15px; display:none;">
+                    <h3>Vehicle Reference</h3>
+                    <div id="reminder-vehicle-details"></div>
+
+                    <h4 style="margin-top: 15px;">Recent Service Logs</h4>
+                    <ul id="reminder-log-preview"></ul>
+                </div>
+
                 <div class="form-group">
-                    <label for="reminder-service">Service Type <span class="req">*</span></label>
+                    <label for="reminder-service">Reminder For <span class="req">*</span></label>
                     <select id="reminder-service" required>
                         <option value="">Select Service Type</option>
                         <option value="Oil Change">Oil Change</option>
@@ -59,35 +75,55 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="interval-miles">Mileage Interval</label>
-                    <input type="number" id="interval-miles" min="0" placeholder="e.g. 5000">
+                    <label for="reminder-mode">How should this reminder work? <span class="req">*</span></label>
+                    <select id="reminder-mode" required>
+                        <option value="either">Whichever comes first: miles or time</option>
+                        <option value="miles">Mileage only</option>
+                        <option value="time">Time only</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="interval-miles">Remind me every how many miles?</label>
+                    <input type="number" id="interval-miles" min="0" placeholder="Example: 5000">
+                    <small class="helper-text">Leave blank if you only want a time-based reminder.</small>
                 </div>
 
                 <div class="form-group">
-                    <label for="interval-months">Time Interval (Months)</label>
-                    <input type="number" id="interval-months" min="0" placeholder="e.g. 6">
+                    <label for="interval-months">Remind me every how many months?</label>
+                    <input type="number" id="interval-months" min="0" placeholder="Example: 6">
+                    <small class="helper-text">Leave blank if you only want a mileage-based reminder.</small>
                 </div>
 
                 <div class="form-group">
-                    <label for="last-mileage">Last Service Mileage <span class="req">*</span></label>
-                    <input type="number" id="last-mileage" min="0" required>
+                    <label for="last-mileage">This service was last done at what mileage? <span
+                            class="req">*</span></label>
+                    <input type="number" id="last-mileage" min="0" placeholder="Example: 120000" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="last-date">Last Service Date <span class="req">*</span></label>
+                    <label for="last-date">This service was last done on what date? <span class="req">*</span></label>
                     <input type="date" id="last-date" required>
                 </div>
 
-                <button type="submit" class="btn">Save Reminder</button>
+                <p class="helper-text">
+                    Enter at least one reminder interval. You can use mileage, months, or both.
+                </p>
+
+                <button type="submit" class="btn">Save Dashboard Reminder</button>
             </form>
         </section>
 
         <section class="log-box history-section">
             <h2>Created Reminders</h2>
+            <p class="helper-text">
+                These reminders appear on your dashboard when they are getting close or already overdue.
+            </p>
             <ul id="reminder-list"></ul>
         </section>
     </main>
 
     <script src="script.js"></script>
 </body>
+
 </html>
