@@ -1,5 +1,3 @@
-const API = 'http://localhost:3000/api';
-
 function showToast(msg, type = 'success') {
   const t = document.getElementById('toast');
   t.textContent = msg;
