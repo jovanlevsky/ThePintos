@@ -4,7 +4,7 @@ Members: Jovan Gelevski, Mani Mir Mohammed, Ry Yebeyen, John Burlando, Harry Car
 Below you can find where all of the deliverable 3 deliverables are housed in the repo.
 
 ## Source Code for Phase 1
-Location: /src & /tuneup_backend
+Location: /tuneup_backend/ & /index.html, /about.html, /reminders.html, /garage.html, /log.html, /login.html, /profile.html, /profilescript.js, /script.js, /style.css, and /profilestyle.css
 These two folders have all of the source code for the front and backend, respectively.
 
 ## Core Functionalities Inspection Document
