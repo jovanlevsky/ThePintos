@@ -308,13 +308,11 @@ header {
     margin-bottom: 8px;
 }
 .helper-text {
-    font-size: 0.95rem;
+    display: block;
+    margin-top: 5px;
+    font-size: 0.9rem;
     color: #555;
-    margin-top: 6px;
-    margin-bottom: 10px;
-    line-height: 1.4;
 }
-
 .reminder-actions {
     margin-top: 10px;
     display: flex;
