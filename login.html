@@ -11,11 +11,12 @@
         <div class="logo">TuneUp</div>
         <nav>
             <ul class="nav-links">
-                <li><a href="index.html">Dashboard</a></li>
-                <li><a href="garage.html">My Garage</a></li>
-                <li><a href="log.html">Log Service</a></li>
-                <li><a href="login.html" class="active">Login</a></li>
-                <li><a href="about.html">About team</a></li>
+                <li class="other-btn"><a href="index.html">Dashboard</a></li>
+                <li class="other-btn"><a href="garage.html">My Garage</a></li>
+                <li class="other-btn"><a href="log.html">Log Service</a></li>
+                <li class="other-btn"><a href="reminders.html">Reminders</a></li>
+                <li id="auth-btn"><a href="login.html" class="active">Login</a></li>
+                <li class="other-btn"><a href="about.html">About team</a></li>
             </ul>
         </nav>
     </header>
@@ -35,6 +36,7 @@
                 <button type="submit" class="btn">Login</button>
             </form>
             <p> Don't have an account yet? <a href="#" id="show-register">Sign up here!</a>.</p>
+            <h2 id="notifier"></h2>
         </section>
 
         <section id="register-section" class="auth-box hidden">
@@ -56,7 +58,7 @@
             </form>
             <p>Already have an account?<a href="#" id="show-login">Login here</a>.</p>
         </section>
-        
+
     </main>
 
     <script src="script.js"></script>

@@ -294,3 +294,27 @@ header {
     border-left: 5px solid #28a745;
     font-size: 15px;
 }
+
+#reminder-vehicle-details p {
+    margin: 6px 0;
+}
+
+#reminder-log-preview {
+    margin-top: 10px;
+    padding-left: 18px;
+}
+
+#reminder-log-preview li {
+    margin-bottom: 8px;
+}
+.helper-text {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.9rem;
+    color: #555;
+}
+.reminder-actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+}

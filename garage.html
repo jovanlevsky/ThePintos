@@ -34,39 +34,74 @@
             <button id="add-vehicle-btn" class="btn">+ Add New Vehicle</button>
         </div>
 
-        <section class="vehicle-grid">
-
-            <div class="vehicle-card">
-                <div class="vehicle-icon">IconPlaceholder</div>
-                <h3>2018 Honda Civic</h3>
-                <ul class="vehicle-stats">
-                    <li><strong>VIN: </strong>######</li>
-                    <li><strong>License Plate: </strong>ABC-1234</li>
-                    <li><strong>Current Mileage: </strong>44,500</li>
-                    <li><strong>Status: </strong><span style="color: #dc3545; font-weight: bold;">Needs Oil Change</span></li>
-                </ul>
-                <div class="card-actions">
-                    <a href="log.html" class="btn">Log Service</a>
-                    <button class="btn btn-secondary">Edit Details</button>
-                </div>
-            </div>
-
-            <div class="vehicle-card">
-                <div class="vehicle-icon">IconPlaceholder</div>
-                <h3>2021 Toyota RAV4</h3>
-                <ul class="vehicle-stats">
-                    <li><strong>VIN: </strong>######</li>
-                    <li><strong>License Plate: </strong>XYZ-4321</li>
-                    <li><strong>Current Mileage: </strong>35,000</li>
-                    <li><strong>Status: </strong><span style="color: #28a745; font-weight: bold;">Up to Date</span></li>
-                </ul>
-                <div class="card-actions">
-                    <a href="log.html" class="btn">Log Service</a>
-                    <button class="btn btn-secondary">Edit Details</button>
-                </div>
-            </div>
+        <section class="vehicle-grid" id="vehicle-grid">
+            <!--should be populated by the script-->
         </section>
     </main>
+
+    <!-- add/edit modal -->
+    <div id="vehicle-modal" class="modal-overlay hidden">
+        <div class="modal-box">
+            <h2 id="modal-title">Add New Vehicle</h2>
+            <form id="vehicle-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="v-year">Year <span class="req">*</span></label>
+                        <input type="number" id="v-year" placeholder="e.g. 2021" min="1900" max="2100" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="v-make">Make <span class="req">*</span></label>
+                        <input type="text" id="v-make" placeholder="e.g. Honda" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="v-model">Model <span class="req">*</span></label>
+                        <input type="text" id="v-model" placeholder="e.g. Civic" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="v-vin">VIN</label>
+                        <input type="text" id="v-vin" placeholder="17-character VIN" maxlength="17">
+                    </div>
+                    <div class="form-group">
+                        <label for="v-plate">License Plate</label>
+                        <input type="text" id="v-plate" placeholder="e.g. ABC-1234">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="v-mileage">Current Mileage <span class="req">*</span></label>
+                        <input type="number" id="v-mileage" placeholder="e.g. 45000" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="v-fuel">Fuel Type</label>
+                        <select id="v-fuel">
+                            <option value="">Select...</option>
+                            <option value="Gasoline">Gasoline</option>
+                            <option value="Diesel">Diesel</option>
+                            <option value="Electric">Electric</option>
+                            <option value="Hybrid">Hybrid</option>
+                            <option value="Plug-in Hybrid">Plug-in Hybrid</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="v-oil-type">Oil Type</label>
+                        <input type="text" id="v-oil-type" placeholder="e.g. 0W-20">
+                    </div>
+                    <div class="form-group">
+                        <label for="v-oil-interval">Oil Change Interval (miles)</label>
+                        <input type="number" id="v-oil-interval" placeholder="e.g. 5000" min="1000">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn">Save Vehicle</button>
+                    <button type="button" id="modal-cancel" class="btn btn-secondary">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 

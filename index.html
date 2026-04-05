@@ -6,6 +6,7 @@
     <title>TuneUp Home</title>
     <link rel="stylesheet" href="style.css">
 
+    
     <script>
         const loggedInUser = localStorage.getItem('loggedInUser');
 
@@ -34,19 +35,19 @@
 
         <section class="dashboard-grid">
             <div class="card alert">
-                <h3>Needs Attention</h3>
-                <p><strong>2018 Honda Civic:</strong> Oil change due in 200 miles.</p>
+                <h3>Maintenance Alerts</h3>
+                <ul id = "reminderCard"></ul>
                 <a href="log.html" class="btn">Log Now</a>
             </div>
 
             <div class="card">
                 <h3>Recent Activity</h3>
-                <p>Tire Rotation logged on March 28, 2026.</p>
+                <ul id = "recentActivity"></ul>
             </div>
             
             <div class="card">
                 <h3>My Garage</h3>
-                <p>2 Vehicles Registered</p>
+                <p id = "garageCard"></p>
                 <a href="garage.html" class="btn">View Garage</a>
             </div>
         </section>
@@ -87,5 +88,6 @@
         }
     </script>
 
+    <script src="script.js"></script>
 </body>
 </html>
