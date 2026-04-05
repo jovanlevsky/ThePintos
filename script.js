@@ -445,14 +445,29 @@ function initReminders() {
             const v = vehicles.find(v => v.id === r.vehicleId);
             const li = document.createElement('li');
             li.innerHTML = `
-                <strong>${r.serviceType}</strong> for
-                <strong>${v ? `${v.year} ${v.make} ${v.model}` : 'Unknown Vehicle'}</strong><br>
-                Mileage Interval: ${r.intervalMiles ? r.intervalMiles.toLocaleString() + ' miles' : 'Not set'}<br>
-                Time Interval: ${r.intervalMonths ? r.intervalMonths + ' month' + (r.intervalMonths !== 1 ? 's' : '') : 'Not set'}<br>
-                Last Service Mileage: ${Number(r.lastMileage).toLocaleString()}<br>
-                Last Service Date: ${r.lastDate}
+            <strong>${r.serviceType}</strong> for
+            <strong>${v ? `${v.year} ${v.make} ${v.model}` : 'Unknown Vehicle'}</strong><br>
+            Mileage Interval: ${r.intervalMiles ? r.intervalMiles.toLocaleString() + ' miles' : 'Not set'}<br>
+            Time Interval: ${r.intervalMonths ? r.intervalMonths + ' month' + (r.intervalMonths !== 1 ? 's' : '') : 'Not set'}<br>
+            Last Service Mileage: ${Number(r.lastMileage).toLocaleString()}<br>
+            Last Service Date: ${r.lastDate}
+
+            <div class="reminder-actions">
+            <button class="btn btn-danger delete-reminder" data-id="${r.id}">
+                Delete
+            </button>
+            </div>
             `;
             reminderList.appendChild(li);
+            document.querySelectorAll('.delete-reminder').forEach(btn => {
+            btn.addEventListener('click', () => {
+            if (confirm('Delete this reminder?')) {
+                const updated = getReminders().filter(r => r.id !== btn.dataset.id);
+                saveReminders(updated);
+                renderReminders();
+        }
+    });
+});
         });
     }
 
@@ -516,4 +531,4 @@ if (page === 'index.html') {
 if (page === 'reminders.html') {
     initReminders();
     authBtnChange();
-}
+} 
