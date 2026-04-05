@@ -126,10 +126,10 @@ function getVehicleAlerts(vehicleId) {
 
         if (mode === 'miles') {
             overdue = usesMiles && milesLeft <= 0;
-            dueSoon = !overdue && usesMiles && milesLeft <= 500;
+            dueSoon = !overdue && usesMiles && milesLeft <= 5000;
         } else if (mode === 'time') {
             overdue = usesMonths && monthsLeft <= 0;
-            dueSoon = !overdue && usesMonths && monthsLeft <= 1;
+            dueSoon = !overdue && usesMonths && monthsLeft <= 6;
         } else {
             overdue =
                 (usesMiles && milesLeft <= 0) ||
@@ -137,8 +137,8 @@ function getVehicleAlerts(vehicleId) {
 
             dueSoon =
                 !overdue && (
-                    (usesMiles && milesLeft <= 500) ||
-                    (usesMonths && monthsLeft <= 1)
+                    (usesMiles && milesLeft <= 5000) ||
+                    (usesMonths && monthsLeft <= 6)
                 );
         }
 
@@ -289,8 +289,39 @@ function initGarage() {
             oilType: document.getElementById('v-oil-type').value,
             oilInterval: parseInt(document.getElementById('v-oil-interval').value) || 5000,
         };
-        if (editId) { const i = vehicles.findIndex(v => v.id === editId); if (i > -1) vehicles[i] = { ...vehicles[i], ...data }; }
-        else { data.id = generateId(); vehicles.push(data); }
+        if (editId) {
+            const i = vehicles.findIndex(v => v.id === editId);
+            if (i > -1) vehicles[i] = { ...vehicles[i], ...data };
+        } else {
+            data.id = generateId();
+            vehicles.push(data);
+
+            // auto-create oil change reminder from vehicle oil interval
+            if (data.oilInterval && Number(data.oilInterval) > 0) {
+                const reminders = getReminders();
+                const alreadyHasOilReminder = reminders.some(r =>
+                    r.vehicleId === data.id && r.serviceType === 'Oil Change'
+                );
+
+                if (!alreadyHasOilReminder) {
+                    const today = new Date().toISOString().split('T')[0];
+
+                    reminders.push({
+                        id: generateId(),
+                        vehicleId: data.id,
+                        serviceType: 'Oil Change',
+                        reminderMode: 'miles',
+                        intervalMiles: Number(data.oilInterval),
+                        intervalMonths: 0,
+                        lastMileage: Number(data.mileage) || 0,
+                        lastDate: today
+                    });
+
+                    saveReminders(reminders);
+                }
+            }
+        }
+        saveVehicles(vehicles);
         saveVehicles(vehicles);
         modal.classList.add('hidden');
         renderGarage();
@@ -367,10 +398,45 @@ function initLog() {
         let vehicles = getVehicles();
         const vi = vehicles.findIndex(v => v.id === vehicleId);
         if (vi > -1 && mileage > vehicles[vi].mileage) { vehicles[vi].mileage = mileage; saveVehicles(vehicles); }
-        // Update reminder
+        // Update or auto-create reminder
         let reminders = getReminders();
         const ri = reminders.findIndex(r => r.vehicleId === vehicleId && r.serviceType === serviceType);
-        if (ri > -1) { reminders[ri].lastMileage = mileage; reminders[ri].lastDate = date; saveReminders(reminders); }
+
+        const defaultReminderSettings = {
+            "Oil Change": { reminderMode: "miles", intervalMiles: 5000, intervalMonths: 0 },
+            "Tire Rotation": { reminderMode: "miles", intervalMiles: 6000, intervalMonths: 0 },
+            "Tire Replacement": { reminderMode: "miles", intervalMiles: 50000, intervalMonths: 0 },
+            "Brake Pad Replacement": { reminderMode: "miles", intervalMiles: 30000, intervalMonths: 0 },
+            "Brake Inspection": { reminderMode: "either", intervalMiles: 12000, intervalMonths: 12 },
+            "Fluid Check": { reminderMode: "either", intervalMiles: 5000, intervalMonths: 6 },
+            "State Inspection": { reminderMode: "time", intervalMiles: 0, intervalMonths: 12 },
+            "Air Filter": { reminderMode: "miles", intervalMiles: 15000, intervalMonths: 0 },
+            "Battery Replacement": { reminderMode: "time", intervalMiles: 0, intervalMonths: 36 },
+            "Transmission Service": { reminderMode: "miles", intervalMiles: 30000, intervalMonths: 0 },
+            "Coolant Flush": { reminderMode: "time", intervalMiles: 0, intervalMonths: 24 },
+            "Other": { reminderMode: "either", intervalMiles: 5000, intervalMonths: 6 }
+        };
+
+        if (ri > -1) {
+            reminders[ri].lastMileage = mileage;
+            reminders[ri].lastDate = date;
+            saveReminders(reminders);
+        } else {
+            const defaults = defaultReminderSettings[serviceType] || defaultReminderSettings["Other"];
+
+            reminders.push({
+                id: generateId(),
+                vehicleId,
+                serviceType,
+                reminderMode: defaults.reminderMode,
+                intervalMiles: defaults.intervalMiles,
+                intervalMonths: defaults.intervalMonths,
+                lastMileage: mileage,
+                lastDate: date
+            });
+
+            saveReminders(reminders);
+        }
         this.reset();
         renderLogs();
         alert('Service logged successfully!');
@@ -387,63 +453,95 @@ function initDashboard() {
     const recent = document.getElementById('recentActivity');
     const garageCard = document.getElementById('garageCard');
 
+
     // maintenance reminder card
     if (reminderCard) {
         const vehicles = getVehicles();
-        const alerts = [];
+        const overdueAlerts = [];
+        const soonAlerts = [];
 
         reminderCard.innerHTML = '';
 
         vehicles.forEach(v => {
             const vReminders = getVehicleAlerts(v.id);
             vReminders.forEach(r => {
-                alerts.push({ vehicle: v, service: r.service, milesLeft: r.milesLeft, monthsLeft: r.monthsLeft, type: r.type });
+                const alertData = {
+                    vehicle: v,
+                    service: r.service,
+                    milesLeft: r.milesLeft,
+                    monthsLeft: r.monthsLeft,
+                    type: r.type
+                };
+
+                if (r.type === 'overdue') {
+                    overdueAlerts.push(alertData);
+                } else if (r.type === 'soon') {
+                    soonAlerts.push(alertData);
+                }
             });
         });
 
-        if (alerts.length > 0) {
-            alerts.sort((a, b) => {
-                if (a.type === 'overdue' && b.type === 'soon') return -1;
-                if (a.type === 'soon' && b.type === 'overdue') return 1;
-                return 0;
-            });
-
-            alerts.forEach(alert => {
-                const li = document.createElement('li');
-
-                let statusText = '';
-
-                if (alert.type === 'overdue') {
-                    if (alert.milesLeft !== null && alert.milesLeft <= 0) {
-                        statusText = 'Overdue by ' + Math.abs(alert.milesLeft) + ' miles';
-                    } else if (alert.monthsLeft !== null && alert.monthsLeft <= 0) {
-                        statusText = 'Overdue by ' + Math.abs(alert.monthsLeft) + ' month' + (Math.abs(alert.monthsLeft) !== 1 ? 's' : '');
-                    } else {
-                        statusText = 'Overdue';
-                    }
+        function makeAlertText(alert) {
+            if (alert.type === 'overdue') {
+                if (alert.milesLeft !== null && alert.milesLeft <= 0) {
+                    return 'Overdue by ' + Math.abs(alert.milesLeft) + ' miles';
+                } else if (alert.monthsLeft !== null && alert.monthsLeft <= 0) {
+                    return 'Overdue by ' + Math.abs(alert.monthsLeft) + ' month' + (Math.abs(alert.monthsLeft) !== 1 ? 's' : '');
                 } else {
-                    const parts = [];
-                    if (alert.milesLeft !== null && alert.milesLeft > 0) {
-                        parts.push(alert.milesLeft + ' miles left');
-                    }
-                    if (alert.monthsLeft !== null && alert.monthsLeft > 0) {
-                        parts.push(alert.monthsLeft + ' month' + (alert.monthsLeft !== 1 ? 's' : '') + ' left');
-                    }
-                    statusText = 'Due Soon' + (parts.length ? ' • ' + parts.join(' • ') : '');
+                    return 'Overdue';
                 }
+            } else {
+                const parts = [];
+                if (alert.milesLeft !== null && alert.milesLeft > 0) {
+                    parts.push(alert.milesLeft + ' miles left');
+                }
+                if (alert.monthsLeft !== null && alert.monthsLeft > 0) {
+                    parts.push(alert.monthsLeft + ' month' + (alert.monthsLeft !== 1 ? 's' : '') + ' left');
+                }
+                return parts.length ? parts.join(' • ') : 'Coming up soon';
+            }
+        }
 
+        // OVERDUE SECTION
+        const overdueHeader = document.createElement('li');
+        overdueHeader.innerHTML = '<strong style="color:#dc3545;">Overdue</strong>';
+        reminderCard.appendChild(overdueHeader);
+
+        if (overdueAlerts.length === 0) {
+            const li = document.createElement('li');
+            li.innerHTML = 'No overdue services.';
+            reminderCard.appendChild(li);
+        } else {
+            overdueAlerts.forEach(alert => {
+                const li = document.createElement('li');
                 li.innerHTML =
                     '<strong>' + alert.service + '</strong> for <strong>' +
                     (alert.vehicle ? alert.vehicle.year + ' ' + alert.vehicle.make + ' ' + alert.vehicle.model : 'Unknown Vehicle') +
-                    '</strong><br>' + statusText;
-
+                    '</strong><br>' + makeAlertText(alert);
                 reminderCard.appendChild(li);
             });
+        }
+
+        // COMING UP SECTION
+        const soonHeader = document.createElement('li');
+        soonHeader.innerHTML = '<strong style="color:#fd7e14;">Coming Up</strong>';
+        reminderCard.appendChild(soonHeader);
+
+        if (soonAlerts.length === 0) {
+            const li = document.createElement('li');
+            li.innerHTML = 'Nothing coming up right now.';
+            reminderCard.appendChild(li);
         } else {
-            reminderCard.innerHTML = "<li>All vehicles are up to date! Great job!</li>";
+            soonAlerts.forEach(alert => {
+                const li = document.createElement('li');
+                li.innerHTML =
+                    '<strong>' + alert.service + '</strong> for <strong>' +
+                    (alert.vehicle ? alert.vehicle.year + ' ' + alert.vehicle.make + ' ' + alert.vehicle.model : 'Unknown Vehicle') +
+                    '</strong><br>' + makeAlertText(alert);
+                reminderCard.appendChild(li);
+            });
         }
     }
-
     // recent activity card
     if (recent) {
         const logs = getLogs();
@@ -560,6 +658,9 @@ function initReminders() {
         renderReminderReference(this.value);
     });
 
+    document.getElementById('filter-vehicle')?.addEventListener('change', renderReminders);
+    document.getElementById('filter-type')?.addEventListener('change', renderReminders);
+
     function resetReminderForm() {
         reminderForm.reset();
         delete reminderForm.dataset.editId;
@@ -574,33 +675,41 @@ function initReminders() {
     function renderReminders() {
         const reminders = getReminders();
         const vehicles = getVehicles();
+        const filterVehicle = document.getElementById('filter-vehicle')?.value || '';
+        const filterType = document.getElementById('filter-type')?.value || '';
+
         reminderList.innerHTML = '';
 
-        if (reminders.length === 0) {
-            reminderList.innerHTML = '<li style="color:#666;padding:10px;">No reminders set yet.</li>';
+        const filtered = reminders.filter(r => {
+            const matchesVehicle = !filterVehicle || r.vehicleId === filterVehicle;
+            const matchesType = !filterType || r.serviceType === filterType;
+            return matchesVehicle && matchesType;
+        });
+
+        if (filtered.length === 0) {
+            reminderList.innerHTML = '<li style="color:#666;padding:10px;">No reminders match this filter.</li>';
             return;
         }
 
-        reminders.forEach(r => {
+        filtered.forEach(r => {
             const v = vehicles.find(v => v.id === r.vehicleId);
             const li = document.createElement('li');
             li.innerHTML = `
-                <strong>${r.serviceType}</strong> for
-                <strong>${v ? `${v.year} ${v.make} ${v.model}` : 'Unknown Vehicle'}</strong><br>
-                Reminder Type: ${
-                    r.reminderMode === 'miles' ? 'Mileage only' :
+            <strong>${r.serviceType}</strong> for
+            <strong>${v ? `${v.year} ${v.make} ${v.model}` : 'Unknown Vehicle'}</strong><br>
+            Reminder Type: ${r.reminderMode === 'miles' ? 'Mileage only' :
                     r.reminderMode === 'time' ? 'Time only' :
-                    'Whichever comes first'
+                        'Whichever comes first'
                 }<br>
-                Mileage Interval: ${r.intervalMiles ? r.intervalMiles.toLocaleString() + ' miles' : 'Not set'}<br>
-                Time Interval: ${r.intervalMonths ? r.intervalMonths + ' month' + (r.intervalMonths !== 1 ? 's' : '') : 'Not set'}<br>
-                Last Service Mileage: ${Number(r.lastMileage).toLocaleString()}<br>
-                Last Service Date: ${r.lastDate}
-                <div class="reminder-actions">
-                    <button class="btn btn-secondary edit-reminder" data-id="${r.id}">Edit</button>
-                    <button class="btn btn-danger delete-reminder" data-id="${r.id}">Delete</button>
-                </div>
-            `;
+            Mileage Interval: ${r.intervalMiles ? r.intervalMiles.toLocaleString() + ' miles' : 'Not set'}<br>
+            Time Interval: ${r.intervalMonths ? r.intervalMonths + ' month' + (r.intervalMonths !== 1 ? 's' : '') : 'Not set'}<br>
+            Last Service Mileage: ${Number(r.lastMileage).toLocaleString()}<br>
+            Last Service Date: ${r.lastDate}
+            <div class="reminder-actions">
+                <button class="btn btn-secondary edit-reminder" data-id="${r.id}">Edit</button>
+                <button class="btn btn-danger delete-reminder" data-id="${r.id}">Delete</button>
+            </div>
+        `;
             reminderList.appendChild(li);
         });
 
