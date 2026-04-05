@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TuneUp - Reminders</title>
+    <link rel="stylesheet" href="style.css">
+
+    <script>
+        const loggedInUser = localStorage.getItem('loggedInUser');
+        if (!loggedInUser) {
+            window.location.href = 'login.html';
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <div class="logo">TuneUp</div>
+        <nav>
+            <ul class="nav-links">
+                <li class="other-btn"><a href="index.html">Dashboard</a></li>
+                <li class="other-btn"><a href="garage.html">My Garage</a></li>
+                <li class="other-btn"><a href="log.html">Log Service</a></li>
+                <li class="other-btn"><a href="reminders.html" class="active">Reminders</a></li>
+                <li id="auth-btn"><a href="login.html">Login</a></li>
+                <li class="other-btn"><a href="about.html">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="log-container">
+        <section class="log-box input-section">
+            <h2>Create Reminder</h2>
+            <form id="reminder-form">
+                <div class="form-group">
+                    <label for="vehicle">Select Vehicle <span class="req">*</span></label>
+                    <select id="vehicle" class="vehicle-select" required>
+                        <option value="">Choose a Vehicle</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="reminder-service">Service Type <span class="req">*</span></label>
+                    <select id="reminder-service" required>
+                        <option value="">Select Service Type</option>
+                        <option value="Oil Change">Oil Change</option>
+                        <option value="Tire Rotation">Tire Rotation</option>
+                        <option value="Tire Replacement">Tire Replacement</option>
+                        <option value="Brake Pad Replacement">Brake Pad Replacement</option>
+                        <option value="Brake Inspection">Brake Inspection</option>
+                        <option value="Fluid Check">Fluid Check</option>
+                        <option value="State Inspection">State Inspection</option>
+                        <option value="Air Filter">Air Filter Replacement</option>
+                        <option value="Battery Replacement">Battery Replacement</option>
+                        <option value="Transmission Service">Transmission Service</option>
+                        <option value="Coolant Flush">Coolant Flush</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="interval-miles">Mileage Interval</label>
+                    <input type="number" id="interval-miles" min="0" placeholder="e.g. 5000">
+                </div>
+
+                <div class="form-group">
+                    <label for="interval-months">Time Interval (Months)</label>
+                    <input type="number" id="interval-months" min="0" placeholder="e.g. 6">
+                </div>
+
+                <div class="form-group">
+                    <label for="last-mileage">Last Service Mileage <span class="req">*</span></label>
+                    <input type="number" id="last-mileage" min="0" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="last-date">Last Service Date <span class="req">*</span></label>
+                    <input type="date" id="last-date" required>
+                </div>
+
+                <button type="submit" class="btn">Save Reminder</button>
+            </form>
+        </section>
+
+        <section class="log-box history-section">
+            <h2>Configured Reminders</h2>
+            <ul id="reminder-list"></ul>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

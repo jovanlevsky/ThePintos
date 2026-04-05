@@ -424,6 +424,79 @@ function authBtnChange() {
     }
 }
 
+function initReminders() {
+    const reminderForm = document.getElementById('reminder-form');
+    const reminderList = document.getElementById('reminder-list');
+    if (!reminderForm || !reminderList) return;
+
+    populateVehicleSelects();
+
+    function renderReminders() {
+        const reminders = getReminders();
+        const vehicles = getVehicles();
+        reminderList.innerHTML = '';
+
+        if (reminders.length === 0) {
+            reminderList.innerHTML = '<li style="color:#666;padding:10px;">No reminders set yet.</li>';
+            return;
+        }
+
+        reminders.forEach(r => {
+            const v = vehicles.find(v => v.id === r.vehicleId);
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <strong>${r.serviceType}</strong> for
+                <strong>${v ? `${v.year} ${v.make} ${v.model}` : 'Unknown Vehicle'}</strong><br>
+                Mileage Interval: ${r.intervalMiles ? r.intervalMiles.toLocaleString() + ' miles' : 'Not set'}<br>
+                Time Interval: ${r.intervalMonths ? r.intervalMonths + ' month' + (r.intervalMonths !== 1 ? 's' : '') : 'Not set'}<br>
+                Last Service Mileage: ${Number(r.lastMileage).toLocaleString()}<br>
+                Last Service Date: ${r.lastDate}
+            `;
+            reminderList.appendChild(li);
+        });
+    }
+
+    reminderForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const vehicleId = document.getElementById('vehicle').value;
+        const serviceType = document.getElementById('reminder-service').value;
+        const intervalMiles = parseInt(document.getElementById('interval-miles').value) || 0;
+        const intervalMonths = parseInt(document.getElementById('interval-months').value) || 0;
+        const lastMileage = parseInt(document.getElementById('last-mileage').value);
+        const lastDate = document.getElementById('last-date').value;
+
+        if (!vehicleId || !serviceType || !lastDate || isNaN(lastMileage)) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+
+        if (intervalMiles === 0 && intervalMonths === 0) {
+            alert('Enter a mileage interval or a time interval.');
+            return;
+        }
+
+        const reminders = getReminders();
+        reminders.push({
+            id: generateId(),
+            vehicleId,
+            serviceType,
+            intervalMiles,
+            intervalMonths,
+            lastMileage,
+            lastDate
+        });
+
+        saveReminders(reminders);
+        reminderForm.reset();
+        populateVehicleSelects();
+        renderReminders();
+        alert('Reminder saved successfully!');
+    });
+
+    renderReminders();
+}
+
 // router logic for log and garage ---------
 const page = window.location.pathname.split('/').pop() || 'index.html';
 if (page === 'garage.html'){
@@ -437,5 +510,10 @@ if (page === 'log.html') {
 }
 if (page === 'index.html') {
     initDashboard();
+    authBtnChange();
+}
+
+if (page === 'reminders.html') {
+    initReminders();
     authBtnChange();
 }
