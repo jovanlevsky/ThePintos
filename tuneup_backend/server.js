@@ -5,6 +5,7 @@ const express = require('express');
 const mysql   = require('mysql2/promise');
 const bcrypt  = require('bcrypt');
 const jwt     = require('jsonwebtoken');
+const crypto  = require('crypto');
 const { body, validationResult } = require('express-validator');
 const cors    = require('cors');
 
@@ -90,6 +91,63 @@ app.post('/api/auth/login', [
     } catch (err) {
         console.error('[login]', err);
         res.status(500).json({ error: 'Server error during login.' });
+    }
+});
+
+// password reset
+
+// POST /api/auth/forgot-password
+app.post('/api/auth/forgot-password', [
+    body('email').isEmail().normalizeEmail(),
+], async (req, res) => {
+    if (validationErrors(req, res)) return;
+    const { email } = req.body;
+    try {
+        const [rows] = await db.query('SELECT id FROM users WHERE email = ?', [email]);
+        const user = rows[0];
+
+        if (user) {
+            const token = crypto.randomBytes(32).toString('hex');
+            const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+            await db.query(
+                'INSERT INTO password_reset_tokens (user_id, token, expires_at) VALUES (?, ?, ?)',
+                [user.id, token, expiresAt]
+            );
+            console.log(`[Password Reset] Token for ${email}: ${token}`);
+            return res.json({ message: 'If that email exists, a reset link has been generated.', token });
+        }
+
+        res.json({ message: 'If that email exists, a reset link has been generated.' });
+    } catch (err) {
+        console.error('[forgot-password]', err);
+        res.status(500).json({ error: 'Server error.' });
+    }
+});
+
+// POST /api/auth/reset-password
+app.post('/api/auth/reset-password', [
+    body('token').trim().notEmpty().withMessage('Token is required.'),
+    body('newPassword').isLength({ min: 8 }).withMessage('Password must be at least 8 characters.'),
+], async (req, res) => {
+    if (validationErrors(req, res)) return;
+    const { token, newPassword } = req.body;
+    try {
+        const [rows] = await db.query(
+            'SELECT id, user_id FROM password_reset_tokens WHERE token = ? AND used = 0 AND expires_at > NOW()',
+            [token]
+        );
+        if (!rows[0]) return res.status(400).json({ error: 'Invalid or expired reset token.' });
+
+        const resetRecord = rows[0];
+        const password_hash = await bcrypt.hash(newPassword, 12);
+
+        await db.query('UPDATE users SET password_hash = ? WHERE id = ?', [password_hash, resetRecord.user_id]);
+        await db.query('UPDATE password_reset_tokens SET used = 1 WHERE id = ?', [resetRecord.id]);
+
+        res.json({ message: 'Password has been reset successfully.' });
+    } catch (err) {
+        console.error('[reset-password]', err);
+        res.status(500).json({ error: 'Server error.' });
     }
 });
 
@@ -466,4 +524,3 @@ app.delete('/api/reminders/:id', requireAuth, async (req, res) => {
 
 
 app.listen(PORT, () => console.log(`TuneUp API running on port ${PORT}`));
-

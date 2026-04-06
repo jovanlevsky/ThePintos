@@ -245,6 +245,80 @@ if (loginSection && registerSection) {
         if (status === 409) { alert('An account with that email already exists.'); return; }
         alert(data.error || 'Registration failed.');
     });
+
+    // forgot password
+    const forgotSection = document.getElementById('forgot-section');
+    const resetSection  = document.getElementById('reset-section');
+
+    function showOnly(section) {
+        [loginSection, registerSection, forgotSection, resetSection].forEach(s => {
+            if (s) s.classList.add('hidden');
+        });
+        if (section) section.classList.remove('hidden');
+    }
+
+    document.getElementById('show-forgot')?.addEventListener('click', e => {
+        e.preventDefault();
+        showOnly(forgotSection);
+    });
+
+    document.getElementById('back-to-login')?.addEventListener('click', e => {
+        e.preventDefault();
+        showOnly(loginSection);
+    });
+
+    document.getElementById('back-to-login-2')?.addEventListener('click', e => {
+        e.preventDefault();
+        showOnly(loginSection);
+    });
+
+    document.getElementById('forgot-form')?.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const email = document.getElementById('forgot-email').value.trim();
+        if (!email) { alert('Please enter your email.'); return; }
+
+        const { ok, data } = await apiFetch('/auth/forgot-password', {
+            method: 'POST',
+            body: JSON.stringify({ email })
+        });
+
+        if (ok && data.token) {
+            document.getElementById('reset-token').value = data.token;
+            document.getElementById('reset-token-display').textContent =
+                'A reset token has been generated. It has been auto-filled below.';
+            showOnly(resetSection);
+        } else if (ok) {
+            alert('If that email is registered, a reset token has been sent.');
+            showOnly(loginSection);
+        } else {
+            alert('Could not reach server. Please try again.');
+        }
+    });
+
+    document.getElementById('reset-form')?.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const token      = document.getElementById('reset-token').value.trim();
+        const newPass    = document.getElementById('reset-password').value;
+        const confirmPass = document.getElementById('reset-confirm').value;
+
+        if (!token) { alert('Reset token is required.'); return; }
+        if (newPass.length < 8) { alert('Password must be at least 8 characters.'); return; }
+        if (newPass !== confirmPass) { alert('Passwords do not match.'); return; }
+
+        const { ok, status, data } = await apiFetch('/auth/reset-password', {
+            method: 'POST',
+            body: JSON.stringify({ token, newPassword: newPass })
+        });
+
+        if (ok) {
+            alert('Password has been reset! You can now log in with your new password.');
+            showOnly(loginSection);
+        } else if (status === 400) {
+            alert(data.error || 'Invalid or expired reset token.');
+        } else {
+            alert('Could not reach server. Please try again.');
+        }
+    });
 }
 
 // alert logic local
