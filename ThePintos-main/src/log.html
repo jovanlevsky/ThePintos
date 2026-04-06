@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TuneUp - Log Service</title>
+    <link rel="stylesheet" href="style.css">
+
+    
+    <script>
+        const loggedInUser = localStorage.getItem('loggedInUser');
+
+        if (!loggedInUser) {
+            window.location.href = 'login.html';
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <div class="logo">TuneUp</div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="garage.html">My Garage</a></li>
+                <li><a href="log.html" class="active">Log Service</a></li>
+                <li class="other-btn"><a href="profile.html">Profile</a></li>
+                <li class="other-btn"><a href="reminders.html">Reminders</a></li>
+                <li><a href="login.html" id="login-nav">Login</a></li>
+                <li><a href="about.html">About team</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="log-container">
+        <section class="log-box input-section">
+            <h2>Record a Service</h2>
+
+            
+            <form id="maintenance-form">
+                <div class="form-group">
+                    <label for="vehicle">Select Vehicle <span class="req">*</span></label>
+                    <select id="vehicle" class="vehicle-select" required>
+                        <option value="">Choose a Vehicle</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="date">Date of Service <span class="req">*</span></label>
+                    <input type="date" id="date" required>
+                </div>
+
+                
+                <div class="form-group">
+                    <label for="service-type">Service Performed <span class="req">*</span></label>
+                    <select id="service-type" required>
+                        <option value="">Select Service Type</option>
+                        <option value="Oil Change">Oil Change</option>
+                        <option value="Tire Rotation">Tire Rotation</option>
+                        <option value="Tire Replacement">Tire Replacement</option>
+                        <option value="Brake Pad Replacement">Brake Pad Replacement</option>
+                        <option value="Brake Inspection">Brake Inspection</option>
+                        <option value="Fluid Check">Fluid Check</option>
+                        <option value="State Inspection">State Inspection</option>
+                        <option value="Air Filter">Air Filter Replacement</option>
+                        <option value="Battery Replacement">Battery Replacement</option>
+                        <option value="Transmission Service">Transmission Service</option>
+                        <option value="Coolant Flush">Coolant Flush</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="mileage">Mileage at Service <span class="req">*</span></label>
+                    <input type="number" id="mileage" placeholder="e.g. 45000" min="0" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Notes (optional)</label>
+                    <textarea id="notes" placeholder="Any additional details about the service..." rows="3"></textarea>
+                </div>
+
+                <button type="submit" class="btn">Log Service</button>
+            </form>
+        </section>
+
+        <section class="log-box history-section">
+            <h2>Service History</h2>
+
+            <div class="filter-bar">
+                <div class="form-group" style="margin-bottom:0;">
+                    <label for="filter-vehicle">Filter by Vehicle</label>
+                    <select id="filter-vehicle" class="vehicle-select">
+                        <option value="">All Vehicles</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                    <label for="filter-type">Filter by Service</label>
+                    <select id="filter-type">
+                        <option value="">All Services</option>
+                        <option value="Oil Change">Oil Change</option>
+                        <option value="Tire Rotation">Tire Rotation</option>
+                        <option value="Tire Replacement">Tire Replacement</option>
+                        <option value="Brake Pad Replacement">Brake Pad Replacement</option>
+                        <option value="Brake Inspection">Brake Inspection</option>
+                        <option value="Fluid Check">Fluid Check</option>
+                        <option value="State Inspection">State Inspection</option>
+                        <option value="Air Filter">Air Filter Replacement</option>
+                        <option value="Battery Replacement">Battery Replacement</option>
+                        <option value="Transmission Service">Transmission Service</option>
+                        <option value="Coolant Flush">Coolant Flush</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="log-container">
+                <ul id="service-list">
+                    <!--filled in by script-->
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+
+    
+    <script>
+        const user = localStorage.getItem('loggedInUser');
+        const loginNav = document.getElementById('login-nav');
+
+        if (user && loginNav) {
+            loginNav.textContent = "Logout";
+            loginNav.href = "#";
+            loginNav.onclick = function(event) {
+                event.preventDefault();
+                localStorage.removeItem('loggedInUser');
+                window.location.href = 'login.html';
+            };
+        }
+    </script>
+</body>
+</html>

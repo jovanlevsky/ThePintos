@@ -1,0 +1,24 @@
+Deliverable 3 Group Project
+By: The Pintos
+Members: Jovan Gelevski, Mani Mir Mohammed, Ry Yebeyen, John Burlando, Harry Carr, JP Gilliam
+Below you can find where all of the deliverable 3 deliverables are housed in the repo.
+
+## Source Code for Phase 1
+Location: /tuneup_backend/ & /src
+These two folders have all of the source code for the backend and frontend, respectively.
+
+## Core Functionalities Inspection Document
+Location: /inspection-code-ThePintos
+Contains our snippets and functions from our source code of the main functionalities of the project along with explanations and rationale.
+
+## Deliverable 3 Report
+Location: /ThePintos-Team-Deliverable-3.pdf
+Has all of the requested content: Diagrams, requirements, test case explanations, user manual, reflection, and contribution table.
+
+## Meeting Minutes
+Location: /meeting-minutes
+All of the meetings we've had thus far and what we spoke about.
+
+## UML Diagrams
+Location: /planning
+The planning folder contains the sequence diagram, use case diagram, and the class diagram.

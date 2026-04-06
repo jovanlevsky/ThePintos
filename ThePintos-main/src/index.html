@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TuneUp Home</title>
+    <link rel="stylesheet" href="style.css">
+
+    
+    <script>
+        const loggedInUser = localStorage.getItem('loggedInUser');
+
+        if (!loggedInUser) {
+            window.location.href = 'login.html';
+        }
+    </script>
+</head>
+
+<body>
+    <header>
+        <div class="logo">TuneUp</div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Dashboard</a></li>
+                <li><a href="garage.html">My Garage</a></li>
+                <li><a href="log.html">Log Service</a></li>
+                <li class="other-btn"><a href="profile.html">Profile</a></li>
+                <li class="other-btn"><a href="reminders.html">Reminders</a></li>
+                <li><a href="login.html" id="login-nav">Login</a></li>
+                <li><a href="about.html">About team</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1 id="welcomeUser">Welcome Back!</h1>
+
+        <section class="dashboard-grid">
+            <div class="card alert">
+                <h3>Maintenance Alerts</h3>
+                <ul id = "reminderCard"></ul>
+                <a href="log.html" class="btn">Log Now</a>
+            </div>
+
+            <div class="card">
+                <h3>Recent Activity</h3>
+                <ul id = "recentActivity"></ul>
+            </div>
+            
+            <div class="card">
+                <h3>My Garage</h3>
+                <p id = "garageCard"></p>
+                <a href="garage.html" class="btn">View Garage</a>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const loggedInEmail = localStorage.getItem('loggedInUser');
+        const storedUser = JSON.parse(localStorage.getItem('registeredUser'));
+
+        const loginNav = document.getElementById('login-nav');
+        const welcome = document.getElementById('welcomeUser');
+
+        if (loggedInEmail) {
+
+            // Default to email
+            let displayName = loggedInEmail;
+
+            // If registered user exists and matches, use name
+            if (storedUser && storedUser.email === loggedInEmail) {
+                displayName = storedUser.name;
+            }
+
+            // welcome message displaying users name
+            if (welcome) {
+                welcome.textContent = "Welcome Back, " + displayName + "!";
+            }
+
+            // change login to logout
+            if (loginNav) {
+                loginNav.textContent = "Logout";
+                loginNav.href = "#";
+                loginNav.onclick = function(event) {
+                    event.preventDefault();
+                    localStorage.removeItem('loggedInUser');
+                    window.location.href = 'login.html';
+                };
+            }
+        }
+    </script>
+
+    <script src="script.js"></script>
+</body>
+</html>

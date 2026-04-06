@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TuneUp - Profile Settings</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    const loggedInUser = localStorage.getItem('loggedInUser');
+    if (!loggedInUser) {
+      window.location.href = 'login.html';
+    }
+  </script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="profilestyle.css">
+</head>
+<body>
+
+<header>
+  <div class="logo">TuneUp</div>
+  <nav>
+    <ul class="nav-links">
+      <li><a href="index.html">Dashboard</a></li>
+      <li><a href="garage.html">My Garage</a></li>
+      <li><a href="log.html">Log Service</a></li>
+      <li><a href="reminders.html">Reminders</a></li>
+      <li><a href="profile.html" class="active">Profile</a></li>
+      <li><a href="login.html" id="login-nav">Login</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="profile-container">
+
+  <h1 style="margin:0; font-size:1.5rem;">Profile Settings</h1>
+
+  <!-- account info -->
+  <div class="profile-card">
+    <div class="profile-avatar-row">
+      <div class="profile-avatar" id="avatar-initials">?</div>
+      <div class="profile-avatar-info">
+        <strong id="display-name">Loading…</strong>
+        <span id="display-email"></span>
+      </div>
+    </div>
+
+    <h2>Update Profile</h2>
+    <p class="section-desc">Change your display name or email address.</p>
+
+    <form id="profile-form" novalidate>
+      <div class="form-group">
+        <label for="p-name">Full Name</label>
+        <input type="text" id="p-name" placeholder="Your name" required>
+      </div>
+      <div class="form-group">
+        <label for="p-email">Email Address</label>
+        <input type="email" id="p-email" placeholder="you@example.com" required>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <button type="button" class="btn btn-secondary" id="reset-profile-btn">Reset</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- change password -->
+  <div class="profile-card">
+    <h2>Change Password</h2>
+    <p class="section-desc">Use a strong password you don't use elsewhere.</p>
+
+    <form id="password-form" novalidate>
+      <div class="form-group">
+        <label for="p-current">Current Password</label>
+        <input type="password" id="p-current" placeholder="Enter current password" required>
+      </div>
+      <hr class="divider">
+      <div class="form-group">
+        <label for="p-new">New Password</label>
+        <input type="password" id="p-new" placeholder="Min. 8 characters" required>
+        <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
+        <div class="strength-label" id="strength-label"></div>
+      </div>
+      <div class="form-group">
+        <label for="p-confirm">Confirm New Password</label>
+        <input type="password" id="p-confirm" placeholder="Repeat new password" required>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Update Password</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- account deletion -->
+  <div class="profile-card danger-zone">
+    <h2>Danger Zone</h2>
+    <p class="section-desc">Permanently delete your account and all associated data. This cannot be undone.</p>
+    <button class="btn btn-danger" id="open-delete-modal">Delete My Account</button>
+  </div>
+
+</main>
+
+<!-- delete confirmation -->
+<div id="delete-modal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <h3>Delete Account?</h3>
+    <p>This will permanently remove your account, all vehicles, maintenance records, and reminders. There is no undo.</p>
+    <div class="form-group">
+      <label for="confirm-email-input">Type your email to confirm</label>
+      <input type="email" id="confirm-email-input" placeholder="you@example.com">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" id="cancel-delete">Cancel</button>
+      <button class="btn btn-danger" id="confirm-delete">Yes, Delete Everything</button>
+    </div>
+  </div>
+</div>
+
+
+<div id="toast"></div>
+
+<script src="script.js"></script>
+<script src="profilescript.js"></script>
+</body>
+</html>

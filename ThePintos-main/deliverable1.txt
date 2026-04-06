@@ -1,0 +1,10 @@
+Root:
+- README.md
+- GROUP-INFO
+- deliverable1.txt
+
+Directories and Files:
+- meeting-minutes/meeting1.md
+- planning/README.md
+- reports/README.md
+- src/README.md
