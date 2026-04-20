@@ -113,8 +113,9 @@ app.post('/api/auth/forgot-password', [
                 'INSERT INTO password_reset_tokens (user_id, token, expires_at) VALUES (?, ?, ?)',
                 [user.id, token, expiresAt]
             );
-            console.log(`[Password Reset] Token for ${email}: ${token}`);
-            return res.json({ message: 'If that email exists, a reset link has been generated.', token });
+            // obfuscated token from debugging period
+            console.log(`[Password Reset] Token for ${email}: token`);
+            return res.json({ message: 'If that email exists, a reset link has been generated.'});
         }
 
         res.json({ message: 'If that email exists, a reset link has been generated.' });
